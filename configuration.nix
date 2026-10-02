@@ -17,7 +17,7 @@ in
   
   home-manager.useUserPackages = true;
   home-manager.useGlobalPkgs = true;
-  home-manager.backupFileExtention = "backup";
+  home-manager.backupFileExtension = "backup";
   home-manager.users.sudo-v3l = import ./home.nix;
   users.users.eve.isNormalUser = true;
   home-manager.users.eve = { pkgs, ... }: {
