@@ -75,6 +75,7 @@
   # --- Hyprland Configuration & Waybar Autostart ---
   wayland.windowManager.hyprland = {
     enable = true;
+    configType = "hyprlang";
     settings = {
       # Autostart Waybar on session launch
       "exec-once" = [
