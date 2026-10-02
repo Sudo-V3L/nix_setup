@@ -12,7 +12,7 @@
     hyprland.url = "github:hyprwm/Hyprland";
   };
 
-  outputs = inputs@{nixpkgs, home-manager, hyprland, ...}: {
+  outputs = inputs@{nixpkgs, home-manager, hyprland, pkgs, ...}: {
     homeConfigurations."sudo-v3l@tech_support" = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
 
