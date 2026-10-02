@@ -9,44 +9,22 @@
 in
 {
 
-    imports =
-    [
-      ./hardware-configuration.nix
-      (import"${home-manager}/nixos")
-    ];
-  
-  home-manager.useUserPackages = true;
-  home-manager.useGlobalPkgs = true;
-  home-manager.backupFileExtension = "backup";
-  home-manager.users.sudo-v3l = import ./home.nix;
-  users.users.eve.isNormalUser = true;
-  home-manager.users.eve = { pkgs, ... }: {
-    home.packages = [ pkgs.atool pkgs.httpie ];
-    programs.bash.enable = true;
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
-    # The state version is required and should stay at the version you
-    # originally installed.
-    home.stateVersion = "26.05";  
-  };
-
-  # Use the systemd-boot EFI boot loader.
+  # Bootloader & Hostname
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.hostName = "tech_support"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Enabling Flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  # Enable networking
+  networking.hostName = "tech_support";
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
+  # Enable Flakes
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Locale & Timezone
   time.timeZone = "Asia/Kolkata";
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_GB.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_IN";
     LC_IDENTIFICATION = "en_IN";
@@ -59,31 +37,33 @@ in
     LC_TIME = "en_IN";
   };
 
-  # Configure keymap in X11
+  # X11 Keymap
   services.xserver.xkb = {
     layout = "us";
     variant = "";
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # User Configuration
   users.users."sudo-v3l" = {
     isNormalUser = true;
     description = "Shivansh Narayan Tripathi";
     extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.fish;
-    packages = with pkgs; [];
   };
 
-  # Allow unfree packages
+  # Unfree packages & Programs
   nixpkgs.config.allowUnfree = true;
-  # Install firefox
   programs.firefox.enable = true;
-  # Setup hyprland
-  services.displayManager.defaultSession = "hyprland";
-  programs.hyprland.enable = true;
-  programs.hyprland.xwayland.enable = true;  
+  programs.fish.enable = true;
+  services.envfs.enable = true;
 
-  # Enable greeted (the display manager)
+  # Hyprland System Integration
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
+
+  # Display Manager (greetd)
   services.greetd = {
     enable = true;
     settings = {
@@ -91,27 +71,28 @@ in
         command = ''
           ${pkgs.tuigreet}/bin/tuigreet \
           --time \
-	  --remember \
-	  --remember-user-session \
-	  --theme "border=red;text=red;prompt=red;time=red;action=red;button=red;container=black;input=red" \
-	  --cmd start-hyprland
-	'';
-	user = "greeter";
+          --remember \
+          --remember-user-session \
+          --theme "border=red;text=red;prompt=red;time=red;action=red;button=red;container=black;input=red" \
+          --cmd Hyprland
+        '';
+        user = "greeter";
       };
     };
   };
-  systemd.services.greeted.serviceConfig = {
+
+  systemd.services.greetd.serviceConfig = {
     Type = "idle";
     StandardInput = "tty";
     StandardOutput = "tty";
     StandardError = "journal";
     TTYReset = true;
     TTYVHangup = true;
-    TTYVTDisaloocate = true;
+    TTYVTDisallocate = true;
     TTYPath = "/dev/tty1";
   };
 
-  # Enable NVIDIA drivers
+  # NVIDIA Graphics Setup
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.graphics = {
@@ -132,47 +113,24 @@ in
         enable = true;
         enableOffloadCmd = true;
       };
-
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:2:0:0";
     };
   };
-  boot.initrd.kernelModules = ["nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"];
-  boot.kernelParams = ["nvidia-drm.modeset=1"];
 
-  # Enable /bin/bash
-    services.envfs.enable = true;
-  # Enable fish
-  programs.fish.enable = true;
-  # List packages installed in system profile.
-  # You can use https://search.nixos.org/ to find more packages (and options).
+  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.kernelParams = [ "nvidia-drm.modeset=1" ];
+
+  # System Profiles Packages
   environment.systemPackages = with pkgs; [
- 	neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
- 	wget
-	fish
-	foot
-	hyprland
-	kitty
-	waybar
-	vim
-	nwg-look
-	fastfetch
-	btop
-	hyprpaper
-	kdePackages.dolphin
-	discord
-	steam
-	git
-	curl
-	rofi
-	awww
-	wl-clipboard
-	hyprpicker
-	grim
-	grc
-	slurp
-   ];
-
+    neovim
+    wget
+    curl
+    git
+    kitty
+    foot
+    wl-clipboard
+  ];
   # Setting up hyprpaper
   # Generate the config file system-wide or read it directly
   systemd.user.services.hyprpaper = {
@@ -192,47 +150,6 @@ in
     ipc = off
   '';
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
-
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-  # to actually do that.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "26.05"; # Did you read the comment?
+  system.stateVersion = "26.05"; # Do not touch
 
 }
