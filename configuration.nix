@@ -28,6 +28,7 @@ in
     # originally installed.
     home.stateVersion = "26.05";  
   };
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -35,9 +36,7 @@ in
   networking.hostName = "tech_support"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  # Enabling Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   # Enable networking
   networking.networkmanager.enable = true;
@@ -170,6 +169,7 @@ in
 	wl-clipboard
 	hyprpicker
 	grim
+	grc
 	slurp
    ];
 

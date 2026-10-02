@@ -5,6 +5,12 @@
 	home.homeDirectory = "/home/sudo-v3l";
 	home.stateVersion = "26.05";
 
+  	services.xserver.enable = true;
+
+  	wayland.windowManager.hyprland.enable = true;
+
+	
+
 	programs.fish = {
 		enable = true;
 
