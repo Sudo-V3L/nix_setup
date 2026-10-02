@@ -32,6 +32,7 @@
   # --- Activate Waybar ---
   programs.waybar = {
     enable = true;
+    systemd.enable = true;
     settings = {
       mainBar = {
         layer = "top";
@@ -75,6 +76,7 @@
   # --- Hyprland Configuration & Waybar Autostart ---
   wayland.windowManager.hyprland = {
     enable = true;
+    systemd.enable = true;
     configType = "hyprlang";
     settings = {
       # Autostart Waybar on session launch
@@ -84,13 +86,42 @@
 
       # Practical default modifier (SUPER / Windows key)
       "$mainMod" = "SUPER";
+    bind = [
+      # Terminal & Launchers
+        "$mainMod, Return, exec, kitty"         # Super + Enter -> Kitty
+        "$mainMod, Q, killactive,"              # Super + Q -> Close active window
+        "$mainMod, Space, exec, rofi -show drun"# Super + Space -> App Launcher (Rofi)
+        "$mainMod, E, exec, dolphin"            # Super + E -> File Manager
 
-      bind = [
-        "$mainMod, Q, exec, kitty"
-        "$mainMod, C, killactive,"
-        "$mainMod, M, exit,"
-        "$mainMod, E, exec, dolphin"
-        "$mainMod, R, exec, rofi -show drun"
+        # Window Focus (Vim keys h, j, k, l or Arrows)
+        "$mainMod, h, movefocus, l"
+        "$mainMod, l, movefocus, r"
+        "$mainMod, k, movefocus, u"
+        "$mainMod, j, movefocus, d"
+
+        # Workspace Switching (1-5)
+        "$mainMod, 1, workspace, 1"
+        "$mainMod, 2, workspace, 2"
+        "$mainMod, 3, workspace, 3"
+        "$mainMod, 4, workspace, 4"
+        "$mainMod, 5, workspace, 5"
+
+        # Move Active Window to Workspace (Shift + 1-5)
+        "$mainMod SHIFT, 1, movetoworkspace, 1"
+        "$mainMod SHIFT, 2, movetoworkspace, 2"
+        "$mainMod SHIFT, 3, movetoworkspace, 3"
+        "$mainMod SHIFT, 4, movetoworkspace, 4"
+        "$mainMod SHIFT, 5, movetoworkspace, 5"
+
+        # Toggle Floating / Fullscreen
+        "$mainMod, V, togglefloating,"
+        "$mainMod, F, fullscreen,"
+      ];
+
+      # Mouse bindings for moving/resizing windows
+      bindm = [
+        "$mainMod, mouse:272, movewindow"
+        "$mainMod, mouse:273, resizewindow"
       ];
     };
   };
@@ -106,13 +137,9 @@
 
     interactiveShellInit = ''
       set fish_greeting
+      if type -q grc
+      source ${pkgs.grc}/etc/grc.fish
+      end
     '';
-
-    plugins = [
-      {
-        name = "grc";
-        src = pkgs.fishPlugins.grc.src;
-      }
-    ];
   };
 }
