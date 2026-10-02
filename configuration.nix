@@ -2,14 +2,32 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
+  let
+    home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-26.05.tar.gz;
+in
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
 
+    imports =
+    [
+      ./hardware-configuration.nix
+      (import"${home-manager}/nixos")
+    ];
+  
+  home-manager.useUserPackages = true;
+  home-manager.useGlobalPkgs = true;
+  home-manager.backupFileExtention = "backup";
+  home-manager.users.sudo-v3l = import ./home.nix;
+  users.users.eve.isNormalUser = true;
+  home-manager.users.eve = { pkgs, ... }: {
+    home.packages = [ pkgs.atool pkgs.httpie ];
+    programs.bash.enable = true;
+
+    # The state version is required and should stay at the version you
+    # originally installed.
+    home.stateVersion = "26.05";  
+  };
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
