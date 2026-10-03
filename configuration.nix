@@ -15,6 +15,8 @@ in
 
   # Bootloader & Hostname
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 10;
+  boot.loader.timeout = 10;
   boot.loader.efi.canTouchEfiVariables = true;
   networking.hostName = "tech_support";
   networking.networkmanager.enable = true;
