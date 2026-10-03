@@ -92,7 +92,7 @@
 
       -- Environment Variables
       hl.env("XCURSOR_SIZE", "24")
-      hl.enx("HYPRCURSOR_SIZE", "24")
+      hl.env("HYPRCURSOR_SIZE", "24")
 
       -- Application Hotkeys
       hl.bind(mod .. " + Return", hl.dsp.exec_cmd(terminal))
