@@ -65,35 +65,6 @@ in
     xwayland.enable = true;
   };
 
-  # Display Manager (greetd)
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = ''
-          ${pkgs.tuigreet}/bin/tuigreet \
-          --time \
-          --remember \
-          --remember-user-session \
-          --theme "border=red;text=red;prompt=red;time=red;action=red;button=red;container=black;input=red" \
-          --cmd Hyprland
-        '';
-        user = "greeter";
-      };
-    };
-  };
-
-  systemd.services.greetd.serviceConfig = {
-    Type = "idle";
-    StandardInput = "tty";
-    StandardOutput = "tty";
-    StandardError = "journal";
-    TTYReset = true;
-    TTYVHangup = true;
-    TTYVTDisallocate = true;
-    TTYPath = "/dev/tty1";
-  };
-
   # NVIDIA Graphics Setup
   services.xserver.videoDrivers = [ "nvidia" ];
 

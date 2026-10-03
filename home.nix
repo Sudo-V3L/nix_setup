@@ -13,12 +13,13 @@
     # Hyprland & Wayland Ecosystem Tools
     hyprpaper
     hyprpicker
-    rofi
+    rofi-wayland # Use Wayland native Rofi
     grim
     slurp
     wl-clipboard
     awww
     nwg-look
+    font-awesome # Required for Waybar module icons
 
     # Utilities & Applications
     btop
@@ -32,7 +33,8 @@
   # --- Activate Waybar ---
   programs.waybar = {
     enable = true;
-    systemd.enable = true;
+    systemd.enable = true; # Launches automatically via user systemd service
+
     settings = {
       mainBar = {
         layer = "top";
@@ -73,27 +75,30 @@
     '';
   };
 
-  # --- Hyprland Configuration & Waybar Autostart ---
+  # --- Hyprland Lua Configuration ---
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = true;
-    configType = "hyprlang";
+    configType = "lua";
+
     settings = {
-      # Autostart Waybar on session launch
-      "exec-once" = [
+      # Lua syntax for startup processes
+      exec_once = [
         "${pkgs.waybar}/bin/waybar"
       ];
 
-      # Practical default modifier (SUPER / Windows key)
+      # Variables
       "$mainMod" = "SUPER";
-    bind = [
-      # Terminal & Launchers
-        "$mainMod, Return, exec, kitty"         # Super + Enter -> Kitty
-        "$mainMod, Q, killactive,"              # Super + Q -> Close active window
-        "$mainMod, Space, exec, rofi -show drun"# Super + Space -> App Launcher (Rofi)
-        "$mainMod, E, exec, dolphin"            # Super + E -> File Manager
 
-        # Window Focus (Vim keys h, j, k, l or Arrows)
+      # Keybindings array for hyprland.lua
+      bind = [
+        # Terminal & Launchers
+        "$mainMod, Return, exec, kitty"
+        "$mainMod, Q, killactive,"
+        "$mainMod, Space, exec, rofi -show drun"
+        "$mainMod, E, exec, dolphin"
+
+        # Window Focus (Vim keys)
         "$mainMod, h, movefocus, l"
         "$mainMod, l, movefocus, r"
         "$mainMod, k, movefocus, u"
@@ -106,19 +111,18 @@
         "$mainMod, 4, workspace, 4"
         "$mainMod, 5, workspace, 5"
 
-        # Move Active Window to Workspace (Shift + 1-5)
+        # Move Active Window to Workspace
         "$mainMod SHIFT, 1, movetoworkspace, 1"
         "$mainMod SHIFT, 2, movetoworkspace, 2"
         "$mainMod SHIFT, 3, movetoworkspace, 3"
         "$mainMod SHIFT, 4, movetoworkspace, 4"
         "$mainMod SHIFT, 5, movetoworkspace, 5"
 
-        # Toggle Floating / Fullscreen
+        # Window Toggles
         "$mainMod, V, togglefloating,"
         "$mainMod, F, fullscreen,"
       ];
 
-      # Mouse bindings for moving/resizing windows
       bindm = [
         "$mainMod, mouse:272, movewindow"
         "$mainMod, mouse:273, resizewindow"
@@ -136,9 +140,14 @@
     };
 
     interactiveShellInit = ''
-      set fish_greeting
+      set -g fish_greeting ""
       if type -q grc
-      source ${pkgs.grc}/etc/grc.fish
+        source ${pkgs.grc}/etc/grc.fish
+      end
+
+      # Autostart Hyprland on TTY1 login
+      if test (tty) = "/dev/tty1"
+        exec Hyprland
       end
     '';
   };
