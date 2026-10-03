@@ -110,6 +110,7 @@
       for i = 1, 9 do
         hl.bind(mod .. " + " .. i, hl.dsp.focus({ workspace = i }))
 	hl.bind(mod .. " + SHIFT + " .. i, hl.dsp.focus({ workspace = i }))
+      end
 
       -- Mouse Controls
       hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
