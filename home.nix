@@ -82,54 +82,50 @@
     configType = "lua";
 
     settings = {
-      # Autostart Waybar
+      # Autostart processes in Lua array
       exec_once = [
         "${pkgs.waybar}/bin/waybar"
       ];
 
-      # Standard Nix key definition (Home Manager converts this to Lua's ["$mainMod"])
-      "$mainMod" = "SUPER";
-
-      # Keybindings array
+      # Bindings using raw key strings (bypasses invalid $ Lua identifiers)
       bind = [
         # Terminal & Launchers
-        "$mainMod, Return, exec, kitty"
-        "$mainMod, Q, killactive,"
-        "$mainMod, Space, exec, rofi-wayland -show drun"
-        "$mainMod, E, exec, dolphin"
+        "SUPER, Return, exec, ${pkgs.kitty}/bin/kitty"
+        "SUPER, Q, killactive,"
+        "SUPER, Space, exec, ${pkgs.rofi-wayland}/bin/rofi -show drun"
+        "SUPER, E, exec, ${pkgs.kdePackages.dolphin}/bin/dolphin"
 
         # Window Focus (Vim keys)
-        "$mainMod, h, movefocus, l"
-        "$mainMod, l, movefocus, r"
-        "$mainMod, k, movefocus, u"
-        "$mainMod, j, movefocus, d"
+        "SUPER, h, movefocus, l"
+        "SUPER, l, movefocus, r"
+        "SUPER, k, movefocus, u"
+        "SUPER, j, movefocus, d"
 
         # Workspace Switching (1-5)
-        "$mainMod, 1, workspace, 1"
-        "$mainMod, 2, workspace, 2"
-        "$mainMod, 3, workspace, 3"
-        "$mainMod, 4, workspace, 4"
-        "$mainMod, 5, workspace, 5"
+        "SUPER, 1, workspace, 1"
+        "SUPER, 2, workspace, 2"
+        "SUPER, 3, workspace, 3"
+        "SUPER, 4, workspace, 4"
+        "SUPER, 5, workspace, 5"
 
         # Move Active Window to Workspace
-        "$mainMod SHIFT, 1, movetoworkspace, 1"
-        "$mainMod SHIFT, 2, movetoworkspace, 2"
-        "$mainMod SHIFT, 3, movetoworkspace, 3"
-        "$mainMod SHIFT, 4, movetoworkspace, 4"
-        "$mainMod SHIFT, 5, movetoworkspace, 5"
+        "SUPER SHIFT, 1, movetoworkspace, 1"
+        "SUPER SHIFT, 2, movetoworkspace, 2"
+        "SUPER SHIFT, 3, movetoworkspace, 3"
+        "SUPER SHIFT, 4, movetoworkspace, 4"
+        "SUPER SHIFT, 5, movetoworkspace, 5"
 
-        # Window Toggles
-        "$mainMod, V, togglefloating,"
-        "$mainMod, F, fullscreen,"
+        # Toggles
+        "SUPER, V, togglefloating,"
+        "SUPER, F, fullscreen,"
       ];
 
       bindm = [
-        "$mainMod, mouse:272, movewindow"
-        "$mainMod, mouse:273, resizewindow"
+        "SUPER, mouse:272, movewindow"
+        "SUPER, mouse:273, resizewindow"
       ];
     };
   };
-
   # --- Shell Configuration ---
   programs.fish = {
     enable = true;
