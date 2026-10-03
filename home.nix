@@ -80,52 +80,43 @@
     enable = true;
     systemd.enable = true;
     configType = "lua";
+    extraConfig = '' 
+      -- Local Variables & Binaries
+      local mod = "SUPER"
+      local terminal = "${pkgs.kitty}/bin/kitty"
+      local launcher = "${pkgs.rofi}/bin/rofi -show drun"
+      local fileManager = "${pkgs.kdePackages.dolphin}/bin/dolphin"
+      hl.on("hyprland.start", function()
+        hl.exec_cmd("${pkgs.waybar}/bin/waybar")
+      end)
 
-    settings = {
-      # Autostart processes in Lua array
-      exec_once = [
-        "${pkgs.waybar}/bin/waybar"
-      ];
+      -- Environment Variables
+      hl.env("XCURSOR_SIZE", "24")
+      hl.enx("HYPRCURSOR_SIZE", "24")
 
-      # Bindings using raw key strings (bypasses invalid $ Lua identifiers)
-      bind = [
-        # Terminal & Launchers
-        ["SUPER, Return, exec, ${pkgs.kitty}/bin/kitty"]
-        ["SUPER, Q, killactive,"]
-        ["SUPER, Space, exec, ${pkgs.rofi}/bin/rofi -show drun"]
-        ["SUPER, E, exec, ${pkgs.kdePackages.dolphin}/bin/dolphin"]
+      -- Application Hotkeys
+      hl.bind(mod .. " + Return", hl.dsp.exec_cmd(terminal))
+      hl.bind(mod .. " + Space", hl.dsp.exec_cmd(launcher))
+      hl.bind(mod .. " + E", hl.dsp.exec_cmd(fileManager))
+      hl.bind(mod .. " + Q", "killactive")
 
-        # Window Focus (Vim keys)
-        ["SUPER, h, movefocus, l"]
-        ["SUPER, l, movefocus, r"]
-        ["SUPER, k, movefocus, u"]
-        ["SUPER, j, movefocus, d"]
+      -- Focus
+      hl.bind(mod .. " + H", hl.dsp.focus({ direction = "left" }))
+      hl.bind(mod .. " + L", hl.dsp.focus({ direction = "right" }))
+      hl.bind(mod .. " + K", hl.dsp.focus({ direction = "up" }))
+      hl.bind(mod .. " + J", hl.dsp.focus({ direction = "down" }))
 
-        # Workspace Switching (1-5)
-        ["SUPER, 1, workspace, 1"]
-        ["SUPER, 2, workspace, 2"]
-        ["SUPER, 3, workspace, 3"]
-        ["SUPER, 4, workspace, 4"]
-        ["SUPER, 5, workspace, 5"]
+      -- Workspace switching
+      for i = 1, 9 do
+        hl.bind(mod .. " + " .. i, hl.dsp.focus({ workspace = i }))
+	hl.bind(mod .. " + SHIFT + " .. i, hl.dsp.focus({ workspace = i }))
 
-        # Move Active Window to Workspace
-        ["SUPER SHIFT, 1, movetoworkspace, 1"]
-        ["SUPER SHIFT, 2, movetoworkspace, 2"]
-        ["SUPER SHIFT, 3, movetoworkspace, 3"]
-        ["SUPER SHIFT, 4, movetoworkspace, 4"]
-        ["SUPER SHIFT, 5, movetoworkspace, 5"]
-
-        # Toggles
-        ["SUPER, V, togglefloating,"]
-        ["SUPER, F, fullscreen,"]
-      ];
-
-      bindm = [
-        ["SUPER, mouse:272, movewindow"]
-        ["SUPER, mouse:273, resizewindow"]
-      ];
-    };
+      -- Mouse Controls
+      hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
+      hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), {mouse = true})
+    '';
   };
+
   # --- Shell Configuration ---
   programs.fish = {
     enable = true;
