@@ -13,7 +13,7 @@
     # Hyprland & Wayland Ecosystem Tools
     hyprpaper
     hyprpicker
-    rofi-wayland # Use Wayland native Rofi
+    rofi
     grim
     slurp
     wl-clipboard
