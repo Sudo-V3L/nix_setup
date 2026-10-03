@@ -23,6 +23,20 @@
     discord
     steam
   ];
+  services.udiskie = {
+    enable = true;
+    tray = "always";
+  };
+  
+  wayland.windowManager.hyprland = {
+    enable = true;
+    settings = {
+      # Pin Hyprland rendering to the Intel iGPU
+      env = [
+        "AQ_DRM_DEVICES,/dev/dri/by-path/pci-0000:00:02.0-card:/dev/dri/by-path/pci-0000:02:00.0-card"
+      ];
+    };
+  };
 
   # Enable end-4's Illogical Impulse environment via illogical-flake
   programs.illogical-impulse = {

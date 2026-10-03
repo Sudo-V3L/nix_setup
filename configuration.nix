@@ -20,7 +20,7 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   networking.hostName = "tech_support";
   networking.networkmanager.enable = true;
-
+  boot.supportedFilesystems = [ "exfat" "ntfs" ];
   # Enable Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -74,6 +74,7 @@ in
   programs.fish.enable = true;
   services.envfs.enable = true;
   services.geoclue2.enable = true;
+  services.udisks2.enable = true;
   # Hyprland System Integration
   programs.hyprland = {
     enable = true;
@@ -92,24 +93,25 @@ in
     enable32Bit = true;
   };
 
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = true;
-    powerManagement.finegrained = true;
-    open = true;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-
-    prime = {
-      offload = {
-        enable = true;
-        enableOffloadCmd = true;
-      };
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:2:0:0";
-    };
+hardware.nvidia = {
+  modesetting.enable = true;
+  open = lib.mkForce true;
+  powerManagement = {
+    enable = true;
+    finegrained = true; 
   };
 
+  # Configure PRIME offloading
+  prime = {
+    offload = {
+      enable = lib.mkForce true;
+        enableOffloadCmd = lib.mkForce true;
+  };
+
+    intelBusId = lib.mkForce "PCI:0:2:0";
+    nvidiaBusId = lib.mkForce "PCI:2:0:0";
+  };
+};
   boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
   boot.kernelParams = [ "nvidia-drm.modeset=1" ];
 
@@ -122,6 +124,7 @@ in
     kitty
     foot
     wl-clipboard
+    exfatprogs
   ];
   # Setting up hyprpaper
   # Generate the config file system-wide or read it directly
