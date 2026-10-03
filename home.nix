@@ -92,7 +92,7 @@
         # Terminal & Launchers
         "SUPER, Return, exec, ${pkgs.kitty}/bin/kitty"
         "SUPER, Q, killactive,"
-        "SUPER, Space, exec, ${pkgs.rofi-wayland}/bin/rofi -show drun"
+        "SUPER, Space, exec, ${pkgs.rofi}/bin/rofi -show drun"
         "SUPER, E, exec, ${pkgs.kdePackages.dolphin}/bin/dolphin"
 
         # Window Focus (Vim keys)
