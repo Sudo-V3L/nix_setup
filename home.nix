@@ -98,7 +98,7 @@
       hl.bind(mod .. " + Return", hl.dsp.exec_cmd(terminal))
       hl.bind(mod .. " + Space", hl.dsp.exec_cmd(launcher))
       hl.bind(mod .. " + E", hl.dsp.exec_cmd(fileManager))
-      hl.bind(mod .. " + Q", "killactive")
+      hl.bind(mod .. " + Q", hl.dsp.window.close())
 
       -- Focus
       hl.bind(mod .. " + H", hl.dsp.focus({ direction = "left" }))
@@ -114,7 +114,7 @@
 
       -- Mouse Controls
       hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
-      hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), {mouse = true})
+      hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
     '';
   };
 
