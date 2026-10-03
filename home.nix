@@ -87,8 +87,8 @@
         "${pkgs.waybar}/bin/waybar"
       ];
 
-      # Variable declaration in Lua syntax
-      ["$mainMod"] = "SUPER";
+      # Standard Nix key definition (Home Manager converts this to Lua's ["$mainMod"])
+      "$mainMod" = "SUPER";
 
       # Keybindings array
       bind = [
@@ -129,6 +129,7 @@
       ];
     };
   };
+
   # --- Shell Configuration ---
   programs.fish = {
     enable = true;
