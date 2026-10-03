@@ -90,39 +90,39 @@
       # Bindings using raw key strings (bypasses invalid $ Lua identifiers)
       bind = [
         # Terminal & Launchers
-        "SUPER, Return, exec, ${pkgs.kitty}/bin/kitty"
-        "SUPER, Q, killactive,"
-        "SUPER, Space, exec, ${pkgs.rofi}/bin/rofi -show drun"
-        "SUPER, E, exec, ${pkgs.kdePackages.dolphin}/bin/dolphin"
+        ["SUPER, Return, exec, ${pkgs.kitty}/bin/kitty"]
+        ["SUPER, Q, killactive,"]
+        ["SUPER, Space, exec, ${pkgs.rofi}/bin/rofi -show drun"]
+        ["SUPER, E, exec, ${pkgs.kdePackages.dolphin}/bin/dolphin"]
 
         # Window Focus (Vim keys)
-        "SUPER, h, movefocus, l"
-        "SUPER, l, movefocus, r"
-        "SUPER, k, movefocus, u"
-        "SUPER, j, movefocus, d"
+        ["SUPER, h, movefocus, l"]
+        ["SUPER, l, movefocus, r"]
+        ["SUPER, k, movefocus, u"]
+        ["SUPER, j, movefocus, d"]
 
         # Workspace Switching (1-5)
-        "SUPER, 1, workspace, 1"
-        "SUPER, 2, workspace, 2"
-        "SUPER, 3, workspace, 3"
-        "SUPER, 4, workspace, 4"
-        "SUPER, 5, workspace, 5"
+        ["SUPER, 1, workspace, 1"]
+        ["SUPER, 2, workspace, 2"]
+        ["SUPER, 3, workspace, 3"]
+        ["SUPER, 4, workspace, 4"]
+        ["SUPER, 5, workspace, 5"]
 
         # Move Active Window to Workspace
-        "SUPER SHIFT, 1, movetoworkspace, 1"
-        "SUPER SHIFT, 2, movetoworkspace, 2"
-        "SUPER SHIFT, 3, movetoworkspace, 3"
-        "SUPER SHIFT, 4, movetoworkspace, 4"
-        "SUPER SHIFT, 5, movetoworkspace, 5"
+        ["SUPER SHIFT, 1, movetoworkspace, 1"]
+        ["SUPER SHIFT, 2, movetoworkspace, 2"]
+        ["SUPER SHIFT, 3, movetoworkspace, 3"]
+        ["SUPER SHIFT, 4, movetoworkspace, 4"]
+        ["SUPER SHIFT, 5, movetoworkspace, 5"]
 
         # Toggles
-        "SUPER, V, togglefloating,"
-        "SUPER, F, fullscreen,"
+        ["SUPER, V, togglefloating,"]
+        ["SUPER, F, fullscreen,"]
       ];
 
       bindm = [
-        "SUPER, mouse:272, movewindow"
-        "SUPER, mouse:273, resizewindow"
+        ["SUPER, mouse:272, movewindow"]
+        ["SUPER, mouse:273, resizewindow"]
       ];
     };
   };
