@@ -53,6 +53,14 @@ in
     shell = pkgs.fish;
   };
 
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    backupFileExtension = "backup";
+    extraSpecialArgs = { inherit inputs; };
+    users.sudo-v3l = import ./home.nix;
+  };
+
   # Unfree packages & Programs
   nixpkgs.config.allowUnfree = true;
   programs.firefox.enable = true;
