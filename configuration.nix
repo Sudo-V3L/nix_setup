@@ -61,18 +61,29 @@ in
     users.sudo-v3l = import ./home.nix;
   };
 
-  # Unfree packages & Programs
-  nixpkgs.config.allowUnfree = true;
+  # Unfree packages and allowed packages
+  
+  nixpkgs.config = {
+  allowUnfree = true;
+  packageOverrides = pkgs: {
+    gnome-icon-theme = pkgs.adwaita-icon-theme;
+    };
+  };
+
   programs.firefox.enable = true;
   programs.fish.enable = true;
   services.envfs.enable = true;
-
+  services.geoclue2.enable = true;
   # Hyprland System Integration
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
   };
-
+  fonts.packages = with pkgs; [
+  rubik
+  nerd-fonts.ubuntu
+  nerd-fonts.jetbrains-mono
+  ];
   # NVIDIA Graphics Setup
   services.xserver.videoDrivers = [ "nvidia" ];
 
