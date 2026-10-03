@@ -75,27 +75,27 @@
     '';
   };
 
-  # --- Hyprland Lua Configuration ---
+# --- Hyprland Lua Configuration ---
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = true;
     configType = "lua";
 
     settings = {
-      # Lua syntax for startup processes
+      # Autostart Waybar
       exec_once = [
         "${pkgs.waybar}/bin/waybar"
       ];
 
-      # Variables
-      "$mainMod" = "SUPER";
+      # Variable declaration in Lua syntax
+      ["$mainMod"] = "SUPER";
 
-      # Keybindings array for hyprland.lua
+      # Keybindings array
       bind = [
         # Terminal & Launchers
         "$mainMod, Return, exec, kitty"
         "$mainMod, Q, killactive,"
-        "$mainMod, Space, exec, rofi -show drun"
+        "$mainMod, Space, exec, rofi-wayland -show drun"
         "$mainMod, E, exec, dolphin"
 
         # Window Focus (Vim keys)
@@ -129,7 +129,6 @@
       ];
     };
   };
-
   # --- Shell Configuration ---
   programs.fish = {
     enable = true;
